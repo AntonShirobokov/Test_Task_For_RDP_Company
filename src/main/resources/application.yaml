@@ -3,3 +3,11 @@ spring:
     username: postgres
     password: postgres
     url: jdbc:postgresql://localhost:5433/inventory_reservation_service_db
+  flyway:
+    user: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5433/inventory_reservation_service_db
+
+
+server:
+  port: 8080

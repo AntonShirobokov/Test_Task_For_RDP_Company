@@ -2,7 +2,7 @@ CREATE TABLE  product (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR NOT NULL,
     stock INTEGER NOT NULL CHECK (stock >= 0),
-    version INTEGER NOT NULL
+    version BIGINT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE reservation (
