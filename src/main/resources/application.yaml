@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5433/inventory_reservation_service_db
