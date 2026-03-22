@@ -1,7 +1,7 @@
 package com.shirobokov.inventoryreservationservice.controller;
 
 
-import com.shirobokov.inventoryreservationservice.dto.ProductResponseDto;
+import com.shirobokov.inventoryreservationservice.dto.ProductResponseDTO;
 import com.shirobokov.inventoryreservationservice.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/product/{productId}")
-    public ResponseEntity<ProductResponseDto> getProductInfo(@PathVariable("productId") Long productId) {
+    public ResponseEntity<ProductResponseDTO> getProductInfo(@PathVariable("productId") Long productId) {
         return ResponseEntity.ok(productService.getProductInfo(productId));
     }
 }

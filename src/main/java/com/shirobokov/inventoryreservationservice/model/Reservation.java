@@ -19,7 +19,7 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long reservationId;
+    private Long id;
 
     @Column(name = "quantity")
     private Integer quantity;
