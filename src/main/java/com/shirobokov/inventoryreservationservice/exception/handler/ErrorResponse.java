@@ -1,4 +1,8 @@
 package com.shirobokov.inventoryreservationservice.exception.handler;
 
-public record ErrorResponse(String message) {
-}
+import com.shirobokov.inventoryreservationservice.enumerate.ErrorCode;
+
+public record ErrorResponse(
+        ErrorCode code,
+        String message
+) {}

@@ -1,0 +1,12 @@
+package com.shirobokov.inventoryreservationservice.enumerate;
+
+public enum ErrorCode {
+    PRODUCT_NOT_FOUND,
+    RESERVATION_NOT_FOUND,
+    INVALID_QUANTITY,
+    INSUFFICIENT_STOCK,
+    RESERVATION_ALREADY_CONFIRMED,
+    RESERVATION_EXPIRED,
+    RESERVATION_CANCELLED,
+    TOO_MANY_REQUESTS
+}

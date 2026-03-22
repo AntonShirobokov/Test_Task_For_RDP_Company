@@ -1,9 +1,9 @@
 package com.shirobokov.inventoryreservationservice.service;
 
+import com.shirobokov.inventoryreservationservice.dto.ReservationConfirmDTO;
 import com.shirobokov.inventoryreservationservice.dto.ReservationCreateResponseDTO;
 import com.shirobokov.inventoryreservationservice.enumerate.ReservationStatus;
-import com.shirobokov.inventoryreservationservice.exception.InsufficientStockException;
-import com.shirobokov.inventoryreservationservice.exception.ProductNotFoundException;
+import com.shirobokov.inventoryreservationservice.exception.*;
 import com.shirobokov.inventoryreservationservice.model.Product;
 import com.shirobokov.inventoryreservationservice.model.Reservation;
 import com.shirobokov.inventoryreservationservice.repository.ProductRepository;
@@ -86,5 +86,37 @@ public class ReservationOperationService {
         reservation.setCreatedAt(now);
         reservation.setExpiresAt(now.plus(RESERVATION_TTL));
         return reservation;
+    }
+
+    @Transactional
+    public ReservationConfirmDTO doConfirmReservation(Long reservationId) {
+
+        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() -> new ReservationNotFoundException(reservationId));
+
+        switch (reservation.getStatus()) {
+            case CONFIRMED  -> throw new ReservationAlreadyConfirmedException(reservationId);
+            case EXPIRED    -> throw new ReservationExpiredException(reservationId);
+            case CANCELLED  -> throw new ReservationCancelledException(reservationId);
+        }
+
+        if (isExpired(reservation)) {
+            reservation.setStatus(ReservationStatus.EXPIRED);
+            reservationRepository.save(reservation);
+            throw new ReservationExpiredException(reservationId);
+        }
+
+        reservation.setStatus(ReservationStatus.CONFIRMED);
+        reservationRepository.save(reservation);
+
+        Product product = reservation.getProduct();
+        product.setStock(product.getStock() - reservation.getQuantity());
+
+        productRepository.save(product);
+
+        return new ReservationConfirmDTO(reservationId, ReservationStatus.CONFIRMED);
+    }
+
+    private boolean isExpired(Reservation reservation) {
+        return reservation.getExpiresAt().isBefore(Instant.now());
     }
 }
